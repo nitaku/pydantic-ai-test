@@ -44,8 +44,12 @@ while True:
     prompt = console.input('[orange1 bold]>>>[/] ')
     if prompt == 'exit' or prompt == 'q':
         break
-    if response is None:
-        response = agent.run_sync(prompt)
-    else:
-        response = agent.run_sync(prompt, message_history=response.all_messages())
+    try:
+        if response is None:
+            response = agent.run_sync(prompt)
+        else:
+            response = agent.run_sync(prompt, message_history=response.all_messages())
+    except Exception as e:
+        console.print('An unexpected error occurred.', style='red')
+        continue
     console.print(response.output, style='dark_olive_green3')
