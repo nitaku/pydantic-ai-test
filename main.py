@@ -1,6 +1,5 @@
 # TODO validate user input in a tool
 # TODO perform the match in the roll_die tool
-# TODO maintain context
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -30,9 +29,13 @@ def roll_die() -> str:
     return str(result)
 
 console.print('[cornflower_blue bold]Welcome to the dice game![/]\n\nGuess a number between 1 and 6, I will roll the die and tell you if you win.\nWrite [bold]exit[/] or [bold]q[/] to quit.')
+response = None
 while True:
     prompt = console.input('[orange1 bold]>>>[/] ')
     if prompt == 'exit' or prompt == 'q':
         break
-    response = agent.run_sync(prompt)
+    if response is None:
+        response = agent.run_sync(prompt)
+    else:
+        response = agent.run_sync(prompt, message_history=response.all_messages())
     console.print(response.output, style='dark_olive_green3')
